@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
-import geocodeAddress from './geocode'; // Assuming you have defined this function
+// import geocodeAddress from './geocode'; // Assuming you have defined this function
 import searchPOI from './searchPOI'; // Import the searchPOI function from the appropriate module
 import './App.css';
 // const { REACT_APP_MAPBOX_API_KEY } = process.env;
