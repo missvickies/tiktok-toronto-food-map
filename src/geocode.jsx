@@ -1,7 +1,7 @@
 // geocode.js
 
 import axios from 'axios';
-const { REACT_APP_MAPBOX_API_KEY } = process.env;
+// const { REACT_APP_MAPBOX_API_KEY } = process.env;
 
 const geocodeAddress = async (address) => {
     try {

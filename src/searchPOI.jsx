@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const MAPBOX_API_KEY = process.env.MAPBOX_API_KEY
+// const MAPBOX_API_KEY = process.env.MAPBOX_API_KEY
 
 const searchPOI = async (query) => {
   try {
     const response = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(query)}.json`, {
       params: {
-        access_token: MAPBOX_API_KEY,
+        access_token: REACT_APP_MAPBOX_API_KEY,
         types: 'poi', // Limit search results to points of interest
         limit: 1, // Limit to one result (you can adjust this as needed)
       },
