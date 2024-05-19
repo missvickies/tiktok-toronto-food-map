@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import jsonDataArray from './preprocessing/outputs/data.json'
+import jsonDataArray from './preprocessing/outputs/data_with_geocode.json'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

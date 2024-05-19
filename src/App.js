@@ -5,6 +5,7 @@ import searchPOI from './searchPOI'; // Import the searchPOI function from the a
 import './App.css';
 // const { REACT_APP_MAPBOX_API_KEY } = process.env;
 
+
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY
 const App = ({ jsonDataArray }) => {
   const mapContainerRef = useRef(null);
@@ -61,7 +62,8 @@ const App = ({ jsonDataArray }) => {
     // If address is available, use address-based geocoding
     if (item.address && item.address !== " NA") {
       // console.log(item.restaurant,coordinates)
-      coordinates = await geocodeAddress(item.address);
+      coordinates = {longitude:item.longitude , latitude:item.latitude};
+
     } else if (item.restaurant !== " NA" && item.address === " NA") {
       // If address is not available but restaurant name is provided,
       // perform a point-of-interest (POI) search
