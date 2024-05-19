@@ -58,7 +58,7 @@ async function processData() {
 
     processedItems.map(async (item) => { 
       newData.push(item)
-      if(item.address == " NA" && item.restaurant != " NA" ){
+      if(item.address === " NA" && item.restaurant !== " NA" ){
         noAddresses.push(item.restaurant)
       }
     })
