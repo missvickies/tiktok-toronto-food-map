@@ -5,7 +5,7 @@ import searchPOI from './searchPOI'; // Import the searchPOI function from the a
 import './App.css';
 // const { REACT_APP_MAPBOX_API_KEY } = process.env;
 
-mapboxgl.accessToken = REACT_APP_MAPBOX_API_KEY
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY
 const App = ({ jsonDataArray }) => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
