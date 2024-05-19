@@ -3,11 +3,15 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import jsonDataArray from './preprocessing/outputs/data.json'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    {/* <App /> */}
+    <App jsonDataArray={jsonDataArray} />, document.getElementById('root'));
+
   </React.StrictMode>
 );
 

@@ -1,0 +1,20 @@
+.App {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .block {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+    width: 300px; /* Adjust the width as needed */
+  }
+  
+  .image {
+    width: 100%;
+    height: auto;
+  }
+
+  .mapboxgl-popup-content {
+    width: 500px;
+  }
