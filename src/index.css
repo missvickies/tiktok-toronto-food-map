@@ -1,3 +1,7 @@
+html{
+  height: 100vh;
+  width:100vw;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -5,6 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height:100%;
 }
 
 code {
@@ -15,11 +20,6 @@ code {
 body {
   margin: 0;
   font-family: Helvetica, Arial, sans-serif;
-}
-#map {
-  width: 50vw;
-  height: 50vh;
-  
 }
 .control-panel {
   position: absolute;
@@ -35,8 +35,4 @@ body {
   color: #6b6b76;
   text-transform: uppercase;
   outline: none;
-}
-
-.mapboxgl-popup {
-  width: 800px;
 }

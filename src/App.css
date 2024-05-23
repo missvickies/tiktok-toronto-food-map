@@ -40,7 +40,8 @@
 /* App.css */
 .map-container {
   height: 100vh;
-  width: 100%;
+  width:100vw;
+  position: relative;
 }
 
 .flex-container{
@@ -56,14 +57,10 @@
   word-wrap    : break-word;
   overflow-wrap: break-word;
 }
+
 .flex-container{
   display:flex; 
   flex-direction:row;
   gap: 15px;
-}
-
-.search-input{
-  width:50vw;
-  display:absolute;
 }
 
