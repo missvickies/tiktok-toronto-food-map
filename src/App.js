@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import './App.css';
-import { Img } from 'react-image';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import geocodeAddress from './geocode';
 import Sidebar from './components/sidebar';
-import Button from './components/button';
-
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 
