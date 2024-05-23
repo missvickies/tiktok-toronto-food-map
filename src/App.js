@@ -7,6 +7,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import geocodeAddress from './geocode';
 import Sidebar from './components/sidebar';
+import Button from './components/button';
 
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
@@ -16,6 +17,8 @@ const App = ({ jsonDataArray }) => {
   const mapRef = useRef(null);
   const [pins, setPins] = useState([]);
   const [markers, setMarkers] = useState([]);
+  const [hashtagFilter, setHashtagFilter] = useState(''); // New state for hashtag filter
+
 
   useEffect(() => {
     const initializeMap = async () => {
@@ -98,8 +101,6 @@ const App = ({ jsonDataArray }) => {
       })
     );
 
-    result = pinData.filter(Boolean).filter()
-
     setPins(pinData.filter(Boolean));
   };
 
@@ -107,9 +108,14 @@ const App = ({ jsonDataArray }) => {
     const MyLoader = () => <div>Loading...</div>;
     const MyErrorComponent = () => <div>Error loading image.</div>;
 
+
     if (pins.length > 0 && mapRef.current) {
       markers.forEach((marker) => marker.remove());
-      const newMarkers = pins.map((item) => {
+      const newMarkers = pins.filter(
+        (item) =>
+          hashtagFilter === '' ||
+          item.hashtags.some((tag) => `#${tag.name}` === hashtagFilter)
+      ).map((item) => {
         const popupContent = `
           <div class="flex-container">
             <img src="${item.videoMeta.coverUrl}" alt="Cover" style="max-width:300px"/>
@@ -162,12 +168,32 @@ const App = ({ jsonDataArray }) => {
 
       setMarkers(newMarkers);
     }
-  }, [pins]);
+  }, [pins, hashtagFilter]);
+
+    // Extract unique hashtags from jsonDataArray
+    const uniqueHashtags = Array.from(
+      new Set(
+        pins.flatMap((item) =>
+          item.hashtags.map((tag) => `#${tag.name}`)
+        )
+      )
+    );
+
+    
+
 
   return (
     <div>
-      <Sidebar></Sidebar>
+      <Sidebar>
+        <button onClick={() => setHashtagFilter('')}>Show All</button>
+        {uniqueHashtags.map((hashtag) => (
+          <button key={hashtag} onClick={() => setHashtagFilter(hashtag)}>
+            {hashtag}
+          </button>
+        ))}
+      </Sidebar>
       <div ref={mapContainerRef} className="map-container" />
+      
     </div>
   );
 };
