@@ -1,21 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
-import { RiCloseLargeLine } from "react-icons/ri";
-
 
 export default function Sidebar({children}) {
     return(
         <SideBar>
             <FlexContainer>
             <h2>Filter by hashtag</h2>
-            <CloseBar>
+            {/* <CloseBar>
                 <div>X</div>
-            </CloseBar>
+            </CloseBar> */}
             </FlexContainer>
         {children}
         </SideBar>
     )
 }
+
+function openNav() {
+    document.getElementById("mySidebar").style.width = "250px";
+    document.getElementById("main").style.transform = "translateX(-250px)";
+  }
+  
+  function closeNav() {
+    document.getElementById("mySidebar").style.width = "0";
+    document.getElementById("main").style.transform = "";
+  }
 
 const CloseBar = styled.div`
 &:hover{

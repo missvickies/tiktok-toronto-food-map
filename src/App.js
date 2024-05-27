@@ -14,6 +14,8 @@ const App = ({ jsonDataArray }) => {
   const [pins, setPins] = useState([]);
   const [markers, setMarkers] = useState([]);
   const [hashtagFilter, setHashtagFilter] = useState(''); // New state for hashtag filter
+  const [filteredHashtags, setFilteredHashtags] = useState([]);
+
 
 
   useEffect(() => {
@@ -97,7 +99,22 @@ const App = ({ jsonDataArray }) => {
       })
     );
 
-    setPins(pinData.filter(Boolean));
+    const filteredPinData = pinData.filter(Boolean);
+    setPins(filteredPinData);
+
+    const hashtagCounts = {};
+    filteredPinData.forEach((item) => {
+      item.hashtags.forEach((tag) => {
+        const hashtag = `#${tag.name}`;
+        hashtagCounts[hashtag] = (hashtagCounts[hashtag] || 0) + 1;
+      });
+    });
+
+    const filteredHashtags = Object.keys(hashtagCounts).filter(
+      (hashtag) => hashtagCounts[hashtag] > 2
+    );
+
+    setFilteredHashtags(filteredHashtags);
   };
 
   useEffect(() => {
@@ -182,7 +199,7 @@ const App = ({ jsonDataArray }) => {
     <div>
       <Sidebar>
         <button onClick={() => setHashtagFilter('')}>Show All</button>
-        {uniqueHashtags.map((hashtag) => (
+        {filteredHashtags.map((hashtag) => (
           <button key={hashtag} onClick={() => setHashtagFilter(hashtag)}>
             {hashtag}
           </button>
