@@ -1,5 +1,5 @@
 # TikTok Toronto Food Map
-this project displays crawled TikTok's using Apify. It maps out several tiktok foodie accounts as well as search terms related to toronto food spots.
+this project displays crawled data from TikTok using Apify. It maps out several tiktok foodie accounts as well as search terms related to toronto food spots.
 
 Check out [my post](https://granite-diver-d78.notion.site/Tiktok-Food-Map-In-progress-118bf059f9364d078414fde80d900a1b?pvs=4) for more info on how this is made. 
 Try it for yourself [here](https://tiktoktorontofoodmap.netlify.app/)
