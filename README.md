@@ -22,7 +22,7 @@ I used the chatGPT API to recognize the locations and incorporate it back into J
 
 Initially, the website would lag due to the high number of images being loaded at startup. To combat this, I made sure that the pins within the viewbox were the only images and videos being loaded.
 
-## future features
+## Future Features
 - Interpret subtitiles of videos to get restaurant name or locations. ~50% of the videos were missing a restaurant name and location.
 - Categorize and assign appropiate hashtags to pins.
 
