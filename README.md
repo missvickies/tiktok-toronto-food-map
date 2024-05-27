@@ -12,4 +12,19 @@ Try it for yourself [here](https://tiktoktorontofoodmap.netlify.app/)
   
 ![GIFMaker_me](https://github.com/missvickies/tiktok-toronto-food-map/assets/42661718/7daf214b-5644-4372-a450-ec6ae31a60ee)
 
+## Data
+
+Using Apify, I scraped videos from 10 toronto foodie accounts and one keyword query “toronto must try”. There are other hashtags and search terms I could have used such as “toronto food spots” or “toronto hidden gems”, however, the results for these terms often had unrelated videos and descriptions that did not include information about the restaurant. I had to be very specific in my search queries and it limited the amount of data I could have gotten. In the end, I acquired ~300 Tiktok videos.
+
+I used the chatGPT API to recognize the locations and incorporate it back into JSON.
+
+## Optimizing Load Times
+
+Initially, the website would lag due to the high number of images being loaded at startup. To combat this, I made sure that the pins within the viewbox were the only images and videos being loaded.
+
+## future features
+- Interpret subtitiles of videos to get restaurant name or locations. ~50% of the videos were missing a restaurant name and location.
+- Categorize and assign appropiate hashtags to pins.
+
+
 
