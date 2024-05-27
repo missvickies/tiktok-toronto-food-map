@@ -8,12 +8,20 @@ export default function Sidebar({children}) {
         <SideBar>
             <FlexContainer>
             <h2>Filter by hashtag</h2>
-            < RiCloseLargeLine/>
+            <CloseBar>
+                <div>X</div>
+            </CloseBar>
             </FlexContainer>
         {children}
         </SideBar>
     )
 }
+
+const CloseBar = styled.div`
+&:hover{
+    background-color:grey;
+}
+`
 
 const FlexContainer = styled.div`
     display:flex;
