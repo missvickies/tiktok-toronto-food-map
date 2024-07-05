@@ -1,10 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
+import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
+import { createRoot } from 'react-dom/client';
 import './App.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import Sidebar from './components/sidebar';
+import LoadingScreen from './components/LoadingScreen';
+import VirtualizedList from './components/VirtualizedList';
+import Navbar from './components/navbar'
+import Chip from '@mui/material/Chip';
+import SlidingCard from './components/slidingcard';
+import { Stack } from '@mui/material';
+
+import { BottomNavigation, BottomNavigationAction, Button, Box, SwipeableDrawer, Typography } from '@mui/material';
+import ExploreIcon from '@mui/icons-material/Explore';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import UpdateIcon from '@mui/icons-material/Update';
+import { red } from '@mui/material/colors';
+import { Sledding } from '@mui/icons-material';
+
+const LazyLoadMedia = React.lazy(() => import('./components/LazyLoadMedia'));
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY;
 
@@ -13,58 +30,39 @@ const App = ({ jsonDataArray }) => {
   const mapRef = useRef(null);
   const [pins, setPins] = useState([]);
   const [markers, setMarkers] = useState([]);
-  const [hashtagFilter, setHashtagFilter] = useState(''); // New state for hashtag filter
+  const [selectedPin, setSelectedPin] = useState(null);
+  const [hashtagFilter, setHashtagFilter] = useState('');
   const [filteredHashtags, setFilteredHashtags] = useState([]);
-
-
+  const [loading, setLoading] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     const initializeMap = async () => {
-      // Ensure jsonDataArray is available before initializing the map
       if (!jsonDataArray || jsonDataArray.length === 0) {
         return;
       }
 
-      // Initialize the map centered on the GTA
       const map = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-79.3832, 43.6532], // GTA coordinates
-        zoom: 14, // Adjust zoom level as needed
+        center: [-79.3832, 43.6532],
+        zoom: 14,
+        attributionControl: false
       });
 
       mapRef.current = map;
 
-      // Add search bar (Mapbox Geocoder)
       const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
-        marker: false, // Do not add a marker automatically
-      });
-
-      // Add geocoder to map
-      map.addControl(geocoder);
-
-      geocoder.on('result', (event) => {
-        const { result } = event;
-        const [longitude, latitude] = result.center;
-
-        const marker = new mapboxgl.Marker({ color: 'red' })
-          .setLngLat([longitude, latitude])
-          .addTo(map);
-
-        marker.getElement().addEventListener('mouseenter', () => {
-          // You can add hover functionality here if needed
-        });
-
-        marker.getElement().addEventListener('mouseleave', () => {
-          marker.remove();
-        });
+        marker: false,
       });
 
       map.on('moveend', updatePinsWithinBounds);
 
       updatePinsWithinBounds();
+      setLoading(false);
     };
 
     initializeMap();
@@ -78,7 +76,7 @@ const App = ({ jsonDataArray }) => {
 
   const fetchCoordinates = async (item) => {
     let coordinates = null;
-    if (item.address && item.address !== " NA") {
+    if (item.address && item.address !== ' NA') {
       coordinates = { longitude: item.longitude, latitude: item.latitude };
     }
     return coordinates;
@@ -117,97 +115,104 @@ const App = ({ jsonDataArray }) => {
     setFilteredHashtags(filteredHashtags);
   };
 
+  const renderRow = (item) => (
+    <div key={item.id} className="marker-item">
+      <Suspense fallback={<div>Loading...</div>}>
+        <LazyLoadMedia item={item} />
+      </Suspense>
+    </div>
+  );
+
   useEffect(() => {
-    const MyLoader = () => <div>Loading...</div>;
-    const MyErrorComponent = () => <div>Error loading image.</div>;
-
-
     if (pins.length > 0 && mapRef.current) {
       markers.forEach((marker) => marker.remove());
-      const newMarkers = pins.filter(
-        (item) =>
-          hashtagFilter === '' ||
-          item.hashtags.some((tag) => `#${tag.name}` === hashtagFilter)
-      ).map((item) => {
-        const popupContent = `
-          <div class="flex-container">
-            <img src="${item.videoMeta.coverUrl}" alt="Cover" style="max-width:300px"/>
-            <video class="popup-video" style="display:none;max-width: 300px;" controls>
-              <source preload="none" src="${item.videoMeta.downloadAddr}" type="video/mp4">
-            </video>
-            <div>
-              <h1><strong> ${item.restaurant}</strong></h1>
-              <p><strong>Location:</strong> ${item.address}</p>
-              <p><strong>Description:</strong> ${item.text}</p>
-              <p><strong>Author:</strong> ${item.authorMeta.name}</p>
-            </div>
-          </div>
-        `;
+      const newMarkers = pins
+        .filter(
+          (item) =>
+            hashtagFilter === '' ||
+            item.hashtags.some((tag) => `#${tag.name}` === hashtagFilter)
+        )
+        .map((item) => {
+          const marker = new mapboxgl.Marker({
+            color: selectedPin && selectedPin.id === item.id ? 'red' : 'grey'
+          })
+            .setLngLat([item.longitude, item.latitude])
+            .addTo(mapRef.current);
 
-        const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(popupContent);
-
-        const marker = new mapboxgl.Marker()
-          .setLngLat([item.longitude, item.latitude])
-          .setPopup(popup)
-          .addTo(mapRef.current);
-
-        marker.getElement().addEventListener('click', () => {
-          popup.addTo(mapRef.current);
-          const popupEl = document.querySelector('.mapboxgl-popup-content');
-          const image = popupEl.querySelector('img');
-          const video = popupEl.querySelector('.popup-video');
-
-          image.addEventListener('mouseenter', () => {
-            if (video.paused) {
-              video.style.display = 'block';
-              video.play().catch((error) => {
-                console.error('Error playing video:', error);
-              });
-              image.style.display = 'none';
-            }
+          marker.getElement().addEventListener('click', () => {
+            setSelectedPin(item);
+            setDrawerOpen(true);
           });
 
-          video.addEventListener('mouseleave', () => {
-            if (!video.paused) {
-              video.pause();
-              video.style.display = 'none';
-              image.style.display = 'block';
-            }
-          });
+          return marker;
         });
-
-        return marker;
-      });
 
       setMarkers(newMarkers);
     }
-  }, [pins, hashtagFilter]);
+  }, [pins, hashtagFilter, selectedPin]);
 
-    // Extract unique hashtags from jsonDataArray
-    const uniqueHashtags = Array.from(
-      new Set(
-        pins.flatMap((item) =>
-          item.hashtags.map((tag) => `#${tag.name}`)
-        )
-      )
-    );
-
-    
-
+  const toggleDrawer = (open) => (event) => {
+    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
 
   return (
-    <div>
-      <Sidebar>
-        <button onClick={() => setHashtagFilter('')}>Show All</button>
-        {filteredHashtags.map((hashtag) => (
-          <button key={hashtag} onClick={() => setHashtagFilter(hashtag)}>
-            {hashtag}
-          </button>
-        ))}
-      </Sidebar>
-      <div ref={mapContainerRef} className="map-container" />
-      
-    </div>
+      <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        {loading && <LoadingScreen />}
+        <div ref={mapContainerRef} className='mapbox-container' />
+        <Sidebar>
+          <Chip style={{ backgroundColor: 'white' }} label="show all" variant="filled" onClick={() => setHashtagFilter("")} />
+          {filteredHashtags.map((hashtag) => (
+            <Chip label={hashtag} variant="filled" key={hashtag} onClick={() => setHashtagFilter(hashtag)} style={{ backgroundColor: 'white' }} />
+          ))}
+        </Sidebar>
+        <BottomNavigation
+          sx={{ position: 'relative', zIndex: 1 }}
+          showLabels
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+        >
+          <BottomNavigationAction label="Explore" icon={<ExploreIcon />} />
+          <BottomNavigationAction label="Saved" icon={<BookmarkIcon />} />
+          <BottomNavigationAction label="Updates" icon={<UpdateIcon />} />
+        </BottomNavigation>
+        <SwipeableDrawer
+          anchor="bottom"
+          open={drawerOpen}
+          onClose={toggleDrawer(false)}
+          onOpen={toggleDrawer(true)}
+          sx={{ zIndex: 1301 }}
+        >
+          <Box
+            sx={{
+              p: 2,
+              height: '60vh',
+              overflow: 'auto'
+            }}
+            role="presentation"
+            onClick={toggleDrawer(false)}
+            onKeyDown={toggleDrawer(false)}
+          >
+            {selectedPin && (
+              <>
+                <div>
+                  <h1><strong>{selectedPin.restaurant}</strong></h1>
+                  <p> 📍 {selectedPin.address}</p>
+                  <p>{selectedPin.text}</p>
+                  <p><strong>Author:</strong> {selectedPin.authorMeta.name}</p>
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <LazyLoadMedia item={selectedPin} isOpen={drawerOpen} />
+                  </Suspense>
+                </div>
+              </>
+            )}
+          </Box>
+        </SwipeableDrawer>
+      </Box>
   );
 };
 

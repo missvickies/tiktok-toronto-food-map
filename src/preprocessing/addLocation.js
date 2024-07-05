@@ -40,7 +40,7 @@ async function processData() {
         n: 1
       }, {
         headers: {
-          'Authorization': CHATGPT_API_KEY, // Replace YOUR_API_KEY with your actual API key
+          'Authorization': CHATGPT_API_KEY, 
           'Content-Type': 'application/json'
         }
       });

@@ -6,6 +6,8 @@ Try it for yourself [here](https://tiktoktorontofoodmap.netlify.app/)
 
 <img width="1234" alt="IMG_6303" src="https://github.com/missvickies/tiktok-toronto-food-map/assets/42661718/9ae2e532-f9d8-411a-9505-b5d086be6382">
 
+Try it out here: https://tiktoktorontofoodmap.netlify.app/
+
 ## Features
 - Loads tiktok videos when you hover over the image.
 - Filters by popular hashtags.
