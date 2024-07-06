@@ -17,7 +17,7 @@ const FlexContainer = styled.div`
     position:fixed;
     overflow-x: scroll;
     width:100vw;
-    top:60px;
+    top:50px;
     padding:20px;
     
 `

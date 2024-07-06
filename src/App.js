@@ -13,6 +13,8 @@ import Navbar from './components/navbar'
 import Chip from '@mui/material/Chip';
 import SlidingCard from './components/slidingcard';
 import { Stack } from '@mui/material';
+import Paper from '@mui/material/Paper';
+
 
 import { BottomNavigation, BottomNavigationAction, Button, Box, SwipeableDrawer, Typography } from '@mui/material';
 import ExploreIcon from '@mui/icons-material/Explore';
@@ -57,9 +59,13 @@ const App = ({ jsonDataArray }) => {
         accessToken: mapboxgl.accessToken,
         mapboxgl: mapboxgl,
         marker: false,
+        countries: "CA"
       });
+      map.addControl(geocoder,"top-left")
+
 
       map.on('moveend', updatePinsWithinBounds);
+
 
       updatePinsWithinBounds();
       setLoading(false);
@@ -161,11 +167,16 @@ const App = ({ jsonDataArray }) => {
   return (
       <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         {loading && <LoadingScreen />}
+        <Box sx ={{height:'30', width:'300px'}}id = "searchbar"></Box>
         <div ref={mapContainerRef} className='mapbox-container' />
         <Sidebar>
+        <Paper sx={{borderRadius:16}} elevation={6} > 
           <Chip style={{ backgroundColor: 'white' }} label="show all" variant="filled" onClick={() => setHashtagFilter("")} />
+          </Paper>
           {filteredHashtags.map((hashtag) => (
+            <Paper sx={{borderRadius:16}} elevation={6}> 
             <Chip label={hashtag} variant="filled" key={hashtag} onClick={() => setHashtagFilter(hashtag)} style={{ backgroundColor: 'white' }} />
+            </Paper>
           ))}
         </Sidebar>
         <BottomNavigation
