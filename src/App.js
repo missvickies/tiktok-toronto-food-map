@@ -62,7 +62,7 @@ const App = ({ jsonDataArray }) => {
         countries: "CA"
       });
       map.addControl(geocoder,"top-left")
-      
+
       map.on('moveend', updatePinsWithinBounds);
 
 
@@ -165,8 +165,8 @@ const App = ({ jsonDataArray }) => {
 
   return (
       <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-        {loading && <LoadingScreen />}
-        <Box sx ={{height:'30', width:'300px'}}id = "searchbar"></Box>
+        {/* {loading && <LoadingScreen />} */}
+        <Box sx ={{height:'30', width:'300px'}}id = "searchbar"/>
         <div ref={mapContainerRef} className='mapbox-container' />
         <Sidebar>
         <Paper sx={{borderRadius:16}} elevation={6} > 
@@ -196,6 +196,7 @@ const App = ({ jsonDataArray }) => {
           onClose={toggleDrawer(false)}
           onOpen={toggleDrawer(true)}
           sx={{ zIndex: 1301 }}
+          PaperProps={{ sx: { borderTopLeftRadius: 16,borderTopRightRadius: 16} }}
         >
           <Box
             sx={{
@@ -212,12 +213,12 @@ const App = ({ jsonDataArray }) => {
                 <div>
                   <h1><strong>{selectedPin.restaurant}</strong></h1>
                   <p> 📍 {selectedPin.address}</p>
-                  <p>{selectedPin.text}</p>
                   <p><strong>Author:</strong> {selectedPin.authorMeta.name}</p>
                   <Suspense fallback={<div>Loading...</div>}>
                     <LazyLoadMedia item={selectedPin} isOpen={drawerOpen} />
                   </Suspense>
                 </div>
+                <p>{selectedPin.text}</p>
               </>
             )}
           </Box>

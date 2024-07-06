@@ -80,7 +80,7 @@ const LazyLoadMedia = ({ item, isOpen, onClose }) => {
   return (
     <div className="lazy-load-media">
       <img ref={imageRef} src={item.videoMeta.coverUrl} alt="Cover" style={{ display: isVideoPlaying ? 'none' : 'block', maxWidth: '300px' }} />
-      <video ref={videoRef} className="popup-video" style={{ display: isVideoPlaying ? 'block' : 'none', maxWidth: '300px' }} autoPlay controls>
+      <video ref={videoRef} className="popup-video" style={{ display: isVideoPlaying ? 'block' : 'none', maxWidth: '350px' }} autoPlay controls>
         <source preload="none" src={item.videoMeta.downloadAddr} type="video/mp4" />
       </video>
     </div>
