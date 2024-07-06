@@ -62,8 +62,7 @@ const App = ({ jsonDataArray }) => {
         countries: "CA"
       });
       map.addControl(geocoder,"top-left")
-
-
+      
       map.on('moveend', updatePinsWithinBounds);
 
 
