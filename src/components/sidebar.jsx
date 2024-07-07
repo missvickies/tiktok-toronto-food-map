@@ -21,7 +21,7 @@ const FlexContainer = styled.div`
     margin: 0px 10px;
 
     //mobile
-    @media (max-width: 390px) {
+    @media (max-width: 550px) {
         left:0;
         top:60px;
         width:100vw;
