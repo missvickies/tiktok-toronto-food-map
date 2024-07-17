@@ -14,7 +14,8 @@ import Chip from '@mui/material/Chip';
 import SlidingCard from './components/slidingcard';
 import { Stack } from '@mui/material';
 import Paper from '@mui/material/Paper';
-
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import Avatar from '@mui/material/Avatar';
 
 import { BottomNavigation, BottomNavigationAction, Button, Box, SwipeableDrawer, Typography } from '@mui/material';
 import ExploreIcon from '@mui/icons-material/Explore';
@@ -197,6 +198,9 @@ const App = ({ jsonDataArray }) => {
           onOpen={toggleDrawer(true)}
           sx={{ zIndex: 1301 }}
           PaperProps={{ sx: { borderTopLeftRadius: 16,borderTopRightRadius: 16} }}
+          selectedPin = {selectedPin}
+          
+
         >
           <Box
             sx={{
@@ -209,22 +213,31 @@ const App = ({ jsonDataArray }) => {
             onKeyDown={toggleDrawer(false)}
           >
             {selectedPin && (
-              <>
-                <div>
-                  <h1><strong>{selectedPin.restaurant}</strong></h1>
-                  <p> 📍 {selectedPin.address}</p>
-                  <p><strong>Author:</strong> {selectedPin.authorMeta.name}</p>
+              <Grid container spacing={2} columnSpacing={{ xs: 1, sm: 2, md: 2 }} >
+                <Grid xs={12} sm={6}>
+                <h1><strong>{selectedPin.restaurant}</strong></h1>
+                 <p> 📍 {selectedPin.address}</p>
+                  <Stack direction="row" spacing={1}>
+                  <Avatar src="/broken-image.jpg" sx={{ width: 18, height:18, alignItems:"center"}}></Avatar>
+                  <p>{selectedPin.authorMeta.name}</p>
+                  </Stack>
+                  <p>{selectedPin.text}</p>
+                </Grid>
+
+                <Grid xs={12} sm={6}>
                   <Suspense fallback={<div>Loading...</div>}>
                     <LazyLoadMedia item={selectedPin} isOpen={drawerOpen} />
                   </Suspense>
-                </div>
-                <p>{selectedPin.text}</p>
-              </>
+                  </Grid>
+                
+              </Grid>
             )}
           </Box>
         </SwipeableDrawer>
       </Box>
   );
 };
+
+
 
 export default App;
